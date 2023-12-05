@@ -14,7 +14,6 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useMutation } from '@tanstack/react-query';
 import AuthService from 'src/services/AuthService';
-import { useNavigate } from 'react-router-dom';
 
 function Copyright(props: any) {
   return (
@@ -33,7 +32,6 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function Login() {
-  const navigate = useNavigate();
   const loginMutation = useMutation({
     mutationFn: AuthService.login,
     onSuccess: () => {

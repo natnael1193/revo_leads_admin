@@ -46,6 +46,14 @@ export default function Router() {
                 { path: '/dashboard/user/six', element: <PageSix /> },
               ],
             },
+            {
+              path: '/dashboard/leads',
+              children: [
+                { element: <Navigate to="/dashboard/leads" replace />, index: true },
+                { path: '/dashboard/leads', element: <AllLeads /> },
+                { path: '/dashboard/leads/add', element: <RegisterLead /> }
+              ],
+            },
           ],
         },
     {
@@ -69,5 +77,9 @@ const PageFive = Loadable(lazy(() => import('../pages/PageFive')));
 const PageSix = Loadable(lazy(() => import('../pages/PageSix')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 
-// Custom
+// Auth
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));
+
+// Lead
+const RegisterLead = Loadable(lazy(() => import('../pages/leads/RegisterLead')));
+const AllLeads = Loadable(lazy(() => import('../pages/leads/AllLeads')));

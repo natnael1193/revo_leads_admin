@@ -41,6 +41,15 @@ const navConfig = [
           { title: 'Six', path: '/dashboard/user/six' },
         ],
       },
+      {
+        title: 'Leads',
+        path: '/dashboard/leads',
+        icon: ICONS.user,
+        children: [
+          { title: 'All Leads', path: '/dashboard/leads' },
+          { title: 'Add New Lead', path: '/dashboard/leads/add' },
+        ],
+      },
     ],
   },
 ];
