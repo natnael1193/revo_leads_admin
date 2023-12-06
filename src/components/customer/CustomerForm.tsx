@@ -15,6 +15,11 @@ interface props {
   handleChange: Function;
   leadMutation: Function;
   inforrmationSource: Function;
+  propertyTypeData: Function;
+  propertyType: any;
+  setPropertyType: any;
+  informationSource: any;
+  setInformationSource: any;
 }
 
 const CustomerForm = ({
@@ -24,17 +29,18 @@ const CustomerForm = ({
   image,
   handleChange,
   inforrmationSource,
+  propertyTypeData,
+  propertyType,
+  setPropertyType,
+  informationSource,
+  setInformationSource,
 }: props) => {
-  const [propertyType, setPropertyType] = React.useState('');
-  const [informationSource, setInformationSource] = React.useState('');
-
   const propertyTypeHandleChange = (event: SelectChangeEvent) => {
     setPropertyType(event.target.value as string);
   };
   const informationSourceChange = (event: SelectChangeEvent) => {
     setInformationSource(event.target.value as string);
   };
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -94,9 +100,15 @@ const CustomerForm = ({
                 label="Property Type"
                 onChange={propertyTypeHandleChange}
               >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {propertyTypeData.isLoading ? (
+                  <MenuItem value={10}>Loading</MenuItem>
+                ) : (
+                  propertyTypeData.data.data.map((property_type: any) => (
+                    <MenuItem key={property_type.id} value={property_type.id}>
+                      {property_type.name}
+                    </MenuItem>
+                  ))
+                )}
               </Select>
             </FormControl>
           </Box>

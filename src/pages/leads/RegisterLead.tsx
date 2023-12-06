@@ -4,7 +4,8 @@ import CustomerForm from 'src/components/customer/CustomerForm';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import LeadService from 'src/services/LeadService';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import InformationSource from 'src/services/InformationSourceService';
+import InformationSourceService from 'src/services/InformationSourceService';
+import PropertyTypeService from 'src/services/PropertyTypeService';
 
 interface leadsInputs {
   name: string;
@@ -30,14 +31,35 @@ const RegisterLead = () => {
   const [imageData, setImageData] = React.useState('');
   const [image, setImage] = React.useState(null);
 
+  const [propertyType, setPropertyType] = React.useState('');
+  const [informationSource, setInformationSource] = React.useState('');
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<leadsInputs>();
+
+  // Fetch Information Source
   const inforrmationSource = useQuery({
     queryKey: ['getInformationSource'],
-    queryFn: () => InformationSource.getInformationSource(),
+    queryFn: () => InformationSourceService.getInformationSource(),
+  });
+
+  // Fetch Information Source
+  const propertyTypeData = useQuery({
+    queryKey: ['getPropertyType'],
+    queryFn: () => PropertyTypeService.getPropertyType(),
   });
 
   const leadMutation = useMutation({
     mutationFn: LeadService.addLead,
-    onSuccess: () => {},
+    onSuccess: () => {
+      reset();
+    },
+    onError: () => {},
   });
 
   const handleChange = (file: any) => {
@@ -46,12 +68,6 @@ const RegisterLead = () => {
     setImage(URL.createObjectURL(selectedFile));
   };
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<leadsInputs>();
   const onSubmit: SubmitHandler<leadsInputs> = (data) => {
     const fData = new FormData();
     fData.append('image', imageData);
@@ -61,7 +77,7 @@ const RegisterLead = () => {
     fData.append('phone_two', data.phone_two);
     fData.append('phone_three', data.phone_three);
     fData.append('phone_four', data.phone_four);
-    fData.append('property_type', data.property_type);
+    fData.append('property_type', propertyType);
     fData.append('youtube', data.youtube);
     fData.append('facebook', data.facebook);
     fData.append('telegram', data.telegram);
@@ -70,9 +86,8 @@ const RegisterLead = () => {
     fData.append('whatsapp', data.whatsapp);
     fData.append('website', data.website);
     fData.append('instagram', data.instagram);
-    fData.append('information_source', data.information_source);
-    // console.log('fdata', fData);
-
+    fData.append('information_source', informationSource);
+    console.log('fdata', fData);
     leadMutation.mutate(fData);
   };
 
@@ -90,6 +105,11 @@ const RegisterLead = () => {
             handleChange,
             leadMutation,
             inforrmationSource,
+            propertyTypeData,
+            propertyType,
+            setPropertyType,
+            informationSource,
+            setInformationSource,
           }}
         />
       </Grid>

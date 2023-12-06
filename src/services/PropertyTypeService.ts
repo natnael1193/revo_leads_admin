@@ -1,8 +1,8 @@
 import { apiInstance } from 'src/utils/baseUrl';
 
-const getInformationSource = async () => {
+const getPropertyType = async () => {
   try {
-    const response = await apiInstance.get(`/information_source`, {
+    const response = await apiInstance.get(`/property_type`, {
       headers: {
         Authorization: `Bearer ${localStorage.token}`,
       },
@@ -13,8 +13,8 @@ const getInformationSource = async () => {
   }
 };
 
-const InformationSourceService = {
-  getInformationSource,
+const PropertyTypeService = {
+  getPropertyType,
 };
 
-export default InformationSourceService;
+export default PropertyTypeService;
