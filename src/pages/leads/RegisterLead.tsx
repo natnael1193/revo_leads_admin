@@ -3,7 +3,8 @@ import React from 'react';
 import CustomerForm from 'src/components/customer/CustomerForm';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import LeadService from 'src/services/LeadService';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import InformationSource from 'src/services/InformationSourceService';
 
 interface leadsInputs {
   name: string;
@@ -28,6 +29,11 @@ interface leadsInputs {
 const RegisterLead = () => {
   const [imageData, setImageData] = React.useState('');
   const [image, setImage] = React.useState(null);
+
+  const inforrmationSource = useQuery({
+    queryKey: ['getInformationSource'],
+    queryFn: () => InformationSource.getInformationSource(),
+  });
 
   const leadMutation = useMutation({
     mutationFn: LeadService.addLead,
@@ -75,7 +81,16 @@ const RegisterLead = () => {
       <Grid>
         <Typography>RegisterLead</Typography>
         <CustomerForm
-          {...{ onSubmit, handleSubmit, register, image, setImage, handleChange, leadMutation }}
+          {...{
+            onSubmit,
+            handleSubmit,
+            register,
+            image,
+            setImage,
+            handleChange,
+            leadMutation,
+            inforrmationSource,
+          }}
         />
       </Grid>
     </div>

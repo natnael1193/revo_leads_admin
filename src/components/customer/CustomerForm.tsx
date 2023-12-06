@@ -14,9 +14,17 @@ interface props {
   setImage: string;
   handleChange: Function;
   leadMutation: Function;
+  inforrmationSource: Function;
 }
 
-const CustomerForm = ({ onSubmit, handleSubmit, register, image, handleChange }: props) => {
+const CustomerForm = ({
+  onSubmit,
+  handleSubmit,
+  register,
+  image,
+  handleChange,
+  inforrmationSource,
+}: props) => {
   const [propertyType, setPropertyType] = React.useState('');
   const [informationSource, setInformationSource] = React.useState('');
 
@@ -26,6 +34,7 @@ const CustomerForm = ({ onSubmit, handleSubmit, register, image, handleChange }:
   const informationSourceChange = (event: SelectChangeEvent) => {
     setInformationSource(event.target.value as string);
   };
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -60,9 +69,15 @@ const CustomerForm = ({ onSubmit, handleSubmit, register, image, handleChange }:
                 label="Information Source"
                 onChange={informationSourceChange}
               >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {inforrmationSource.isLoading ? (
+                  <MenuItem value={10}>Loading</MenuItem>
+                ) : (
+                  inforrmationSource.data.data.map((information: any) => (
+                    <MenuItem key={information.id} value={information.id}>
+                      {information.name}
+                    </MenuItem>
+                  ))
+                )}
               </Select>
             </FormControl>
           </Box>
