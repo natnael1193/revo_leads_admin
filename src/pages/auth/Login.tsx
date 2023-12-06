@@ -34,8 +34,9 @@ const defaultTheme = createTheme();
 export default function Login() {
   const loginMutation = useMutation({
     mutationFn: AuthService.login,
-    onSuccess: () => {
-        localStorage.setItem('isLoggedIn', 'true');
+    onSuccess: (data: any) => {
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('token', data.token);
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       window.location.reload();
     },
@@ -43,7 +44,7 @@ export default function Login() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const data: any = new FormData(event.currentTarget);
     console.log({
       email_or_phone: data.get('email'),
       password: data.get('password'),

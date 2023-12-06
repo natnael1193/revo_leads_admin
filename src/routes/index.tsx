@@ -32,8 +32,12 @@ export default function Router() {
           path: '/',
           element: <DashboardLayout />,
           children: [
-            { element: <Navigate to="/dashboard/one" replace />, index: true },
-            { path: '/dashboard', element: <Navigate to="/dashboard/one" replace />, index: true },
+            { element: <Navigate to="/dashboard/leads/get" replace />, index: true },
+            {
+              path: '/dashboard',
+              element: <Navigate to="/dashboard/leads/get" replace />,
+              index: true,
+            },
             { path: '/dashboard/one', element: <PageOne /> },
             { path: '/dashboard/two', element: <PageTwo /> },
             { path: '/dashboard/three', element: <PageThree /> },
@@ -50,8 +54,8 @@ export default function Router() {
               path: '/dashboard/leads',
               children: [
                 { element: <Navigate to="/dashboard/leads" replace />, index: true },
-                { path: '/dashboard/leads', element: <AllLeads /> },
-                { path: '/dashboard/leads/add', element: <RegisterLead /> }
+                { path: '/dashboard/leads/get', element: <AllLeads /> },
+                { path: '/dashboard/leads/add', element: <RegisterLead /> },
               ],
             },
           ],

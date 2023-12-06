@@ -17,14 +17,14 @@ const ICONS = {
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
-  {
-    subheader: 'general v3.0.0',
-    items: [
-      { title: 'One', path: '/dashboard/one', icon: ICONS.dashboard },
-      { title: 'Two', path: '/dashboard/two', icon: ICONS.ecommerce },
-      { title: 'Three', path: '/dashboard/three', icon: ICONS.analytics },
-    ],
-  },
+  // {
+  //   subheader: 'general v3.0.0',
+  //   items: [
+  //     { title: 'One', path: '/dashboard/one', icon: ICONS.dashboard },
+  //     { title: 'Two', path: '/dashboard/two', icon: ICONS.ecommerce },
+  //     { title: 'Three', path: '/dashboard/three', icon: ICONS.analytics },
+  //   ],
+  // },
 
   // MANAGEMENT
   // ----------------------------------------------------------------------
@@ -46,7 +46,7 @@ const navConfig = [
         path: '/dashboard/leads',
         icon: ICONS.user,
         children: [
-          { title: 'All Leads', path: '/dashboard/leads' },
+          { title: 'All Leads', path: '/dashboard/leads/get' },
           { title: 'Add New Lead', path: '/dashboard/leads/add' },
         ],
       },
