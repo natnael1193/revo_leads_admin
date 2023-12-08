@@ -1,10 +1,11 @@
 import { useState } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar } from '@mui/material';
+import { Box, Divider, Typography, Stack, MenuItem, Avatar, Button } from '@mui/material';
 // components
 import MenuPopover from '../../../components/MenuPopover';
 import { IconButtonAnimate } from '../../../components/animate';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -27,6 +28,7 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState<HTMLElement | null>(null);
+  const navigate = useNavigate();
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setOpen(event.currentTarget);
@@ -96,7 +98,15 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem sx={{ m: 1 }}>Logout</MenuItem>
+        <Button
+          onClick={() => {
+            localStorage.clear();
+            navigate('/');
+            window.location.reload();
+          }}
+        >
+          <MenuItem sx={{ m: 1 }}>Logout</MenuItem>
+        </Button>
       </MenuPopover>
     </>
   );

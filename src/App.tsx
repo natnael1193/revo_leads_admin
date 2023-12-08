@@ -13,6 +13,7 @@ import MotionLazyContainer from './components/animate/MotionLazyContainer';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from 'react-query-devtools';
 // ----------------------------------------------------------------------
+import toast, { Toaster } from 'react-hot-toast';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ export default function App() {
               <Settings />
               <ScrollToTop />
               <Router />
+              <Toaster />
             </MotionLazyContainer>
           </RtlLayout>
         </ThemeColorPresets>

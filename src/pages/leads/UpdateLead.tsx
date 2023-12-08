@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import CustomerForm from 'src/components/customer/CustomerForm';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import LeadService from 'src/services/LeadService';
@@ -8,6 +8,8 @@ import InformationSourceService from 'src/services/InformationSourceService';
 import PropertyTypeService from 'src/services/PropertyTypeService';
 import LeadsErrors from 'src/components/customer/LeadsErrors';
 import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
+import UpdateCustomerForm from 'src/components/customer/UpdateCustomerForm';
 
 interface leadsInputs {
   name: string;
@@ -29,23 +31,28 @@ interface leadsInputs {
   image: string;
 }
 
-const RegisterLead = () => {
+const UpdateLead = () => {
   const queryClient = useQueryClient();
+  const leadId: any = useParams();
   const [imageData, setImageData] = React.useState('');
   const [image, setImage]: any = React.useState(null);
 
   const [propertyType, setPropertyType] = React.useState('');
   const [informationSource, setInformationSource] = React.useState('');
 
-  const [leadsErrors, setLeadsErrors] = React.useState(undefined);
+  const [formsData, setFormsData]: any = React.useState(undefined);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<leadsInputs>();
+  //   const [leadsErrors, setLeadsErrors] = React.useState(undefined);
+  //   useEffect(() => {
+  //     lead.refetch();
+  //   }, []);
+
+  //   Get Lead By Id
+  const lead = useQuery({
+    queryKey: ['getLead'],
+    queryFn: () => LeadService.getLead(leadId.id),
+    refetchOnWindowFocus: false,
+  });
 
   // Fetch Information Source
   const inforrmationSource = useQuery({
@@ -57,14 +64,15 @@ const RegisterLead = () => {
   const propertyTypeData = useQuery({
     queryKey: ['getPropertyType'],
     queryFn: () => PropertyTypeService.getPropertyType(),
+    // refetchOnWindowFocus: false,
   });
 
   const leadMutation = useMutation({
-    mutationFn: LeadService.addLead,
+    mutationFn: () => LeadService.updateLead(leadId.id, formsData),
     onSuccess: () => {
       queryClient.invalidateQueries(['getLeads']);
-      toast.error('Registered Successfully');
-      reset();
+      toast.error('Updated Successfully');
+      //   reset();
     },
     onError: (error: any, variables: any, context: any) => {
       // console.log('This error occurred', JSON.stringify(error.message));
@@ -92,7 +100,7 @@ const RegisterLead = () => {
     fData.append('phone_two', data.phone_two);
     fData.append('phone_three', data.phone_three);
     fData.append('phone_four', data.phone_four);
-    fData.append('property_type', propertyType);
+    fData.append('property_type', propertyType ? propertyType : data.property_type);
     fData.append('youtube', data.youtube);
     fData.append('facebook', data.facebook);
     fData.append('telegram', data.telegram);
@@ -101,27 +109,33 @@ const RegisterLead = () => {
     fData.append('whatsapp', data.whatsapp);
     fData.append('website', data.website);
     fData.append('instagram', data.instagram);
-    fData.append('information_source', informationSource);
+    fData.append(
+      'information_source',
+      informationSource ? informationSource : data.information_source
+    );
     console.log('fdata', fData);
+    setFormsData(fData);
     leadMutation.mutate(fData);
   };
 
-  // if (leadMutation.L) {
-  //   console.log('lead.error', JSON.parse(leadMutation.error));
-  // }
+  if (
+    inforrmationSource.isLoading ||
+    propertyTypeData.isLoading ||
+    // ||
+    lead.isFetching
+  )
+    return <div>Loading...</div>;
 
-  if (inforrmationSource.isLoading || propertyTypeData.isLoading) return <div>Loading...</div>;
+  console.log('lead', lead);
 
   return (
     <div>
       <Grid>
-        <Typography>RegisterLead</Typography>
+        <Typography variant='h3'>RegisterLead</Typography>
         {/* {leadsErrors !== undefined && <LeadsErrors {...{ leadsErrors }} />} */}
-        <CustomerForm
+        <UpdateCustomerForm
           {...{
             onSubmit,
-            handleSubmit,
-            register,
             image,
             setImage,
             handleChange,
@@ -132,11 +146,13 @@ const RegisterLead = () => {
             setPropertyType,
             informationSource,
             setInformationSource,
+            lead,
           }}
+          defaultValues={lead.data.data}
         />
       </Grid>
     </div>
   );
 };
 
-export default RegisterLead;
+export default UpdateLead;

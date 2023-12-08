@@ -56,6 +56,7 @@ export default function Router() {
                 { element: <Navigate to="/dashboard/leads" replace />, index: true },
                 { path: '/dashboard/leads/get', element: <AllLeads /> },
                 { path: '/dashboard/leads/add', element: <RegisterLead /> },
+                { path: '/dashboard/leads/update/:id', element: <UpdateLead /> },
               ],
             },
           ],
@@ -87,3 +88,4 @@ const Login = Loadable(lazy(() => import('../pages/auth/Login')));
 // Lead
 const RegisterLead = Loadable(lazy(() => import('../pages/leads/RegisterLead')));
 const AllLeads = Loadable(lazy(() => import('../pages/leads/AllLeads')));
+const UpdateLead = Loadable(lazy(() => import('../pages/leads/UpdateLead')));

@@ -5,6 +5,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useForm } from 'react-hook-form';
+import { imagePath } from 'src/utils/baseUrl';
 
 interface props {
   onSubmit: Function;
@@ -22,11 +24,10 @@ interface props {
   setInformationSource: any;
 }
 
-const CustomerForm = ({
+const UpdateCustomerForm = ({
   onSubmit,
-  handleSubmit,
-  register,
   image,
+  setImage,
   handleChange,
   inforrmationSource,
   propertyTypeData,
@@ -34,8 +35,19 @@ const CustomerForm = ({
   setPropertyType,
   informationSource,
   setInformationSource,
-  leadMutation
+  defaultValues,
+  leadMutation,
 }: any) => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<any>({
+    defaultValues,
+  });
+
   const propertyTypeHandleChange = (event: SelectChangeEvent) => {
     setPropertyType(event.target.value as string);
   };
@@ -70,12 +82,14 @@ const CustomerForm = ({
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Information Source</InputLabel>
               <Select
+                // defaultValue={1}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={informationSource}
+                value={
+                  informationSource === '' ? defaultValues.information_source : informationSource
+                }
                 label="Information Source"
                 onChange={informationSourceChange}
-                required
               >
                 {inforrmationSource.data.data.map((information: any) => (
                   <MenuItem key={information.id} value={information.id}>
@@ -94,7 +108,7 @@ const CustomerForm = ({
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={propertyType}
+                value={propertyType === '' ? defaultValues.property_type : propertyType}
                 label="Property Type"
                 onChange={propertyTypeHandleChange}
                 required
@@ -137,19 +151,25 @@ const CustomerForm = ({
         </Grid>
 
         <Grid item lg={12} md={12} xs={12}>
-          <TextField
+          <input
             type="file"
-            fullWidth
-            label="Image"
+            // fullWidth
+            // label="Image"
             onChange={(e: any) => handleChange(e.target.files)}
+            // onChange={(e: any) => setImage(e.target.value)}
           />
         </Grid>
         <Grid item lg={12} md={12} xs={12} sx={{ m: 3 }}>
-          {<img src={image} />}
+          {!image ? (
+            // <img src={'http://127.0.0.1:8001/storage/' + defaultValues.image} />
+            <img src={imagePath + defaultValues.image} />
+          ) : (
+            <img src={image} />
+          )}
         </Grid>
         <Grid item lg={12} md={12} xs={12} sx={{ mt: 5 }}>
           <Button variant="contained" type="submit">
-            {leadMutation.isLoading ? "Loading..." : "Submit"}
+            {leadMutation.isLoading ? 'Loading...' : 'Submit'}
           </Button>
         </Grid>
       </Grid>
@@ -157,4 +177,4 @@ const CustomerForm = ({
   );
 };
 
-export default CustomerForm;
+export default UpdateCustomerForm;
